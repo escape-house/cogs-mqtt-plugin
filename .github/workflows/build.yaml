@@ -1,0 +1,33 @@
+name: Build and publish
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - v*.*.*
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 24.x
+          cache: "yarn"
+      - run: yarn
+      - run: yarn build
+      - run: cd build && zip -r ../dev.stenz.mqtt.zip dev.stenz.mqtt/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dev.stenz.mqtt.zip
+          path: dev.stenz.mqtt.zip
+      - uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          allowUpdates: true
+          artifacts: dev.stenz.mqtt.zip
+          token: ${{ secrets.GITHUB_TOKEN }}

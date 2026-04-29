@@ -1,0 +1,1 @@
+../src/cogs-plugin-manifest.js

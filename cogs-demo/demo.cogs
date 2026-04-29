@@ -1,0 +1,722 @@
+{
+  "assets": {
+    "config": []
+  },
+  "channels": [],
+  "clients": [],
+  "project": {
+    "formatVersion": "5.9",
+    "locked": false
+  },
+  "resetChecks": [],
+  "rfid": {
+    "items": [],
+    "tags": []
+  },
+  "scenes": {
+    "system": {
+      "preShow": {
+        "variables": [],
+        "values": [],
+        "behaviors": []
+      },
+      "show": {
+        "notes": "Mqtt Demo\n---------\n\nWrite a description of your project here.\ne.g. The world's first astonishing quest featuring an intergalactic zombie\n\n\nTODO:\n✅ Create new project\n⬜️ Make some scenes, channels, behaviours and more\n⬜️ Test and tweak the show\n⬜️ Install and connect hardware\n⬜️ Patch channels\n⬜️ Launch!",
+        "variables": [],
+        "values": [],
+        "behaviors": [
+          {
+            "do": [
+              {
+                "type": "console_log_message",
+                "message": {
+                  "template": {
+                    "type": "value",
+                    "source": {
+                      "type": "plugin_state",
+                      "pluginId": "dev.stenz.mqtt",
+                      "stateName": "subscribePayload"
+                    }
+                  }
+                },
+                "icon": "stream"
+              }
+            ],
+            "type": "when",
+            "value": {
+              "expression": "plugins[\"dev.stenz.mqtt\"].event.mqttMessage?.value === \"testtopic/#\""
+            },
+            "when": {
+              "template": {
+                "type": "plugin_event",
+                "pluginId": "dev.stenz.mqtt",
+                "event": {
+                  "key": "mqttMessage",
+                  "value": "test/cogsTest"
+                }
+              }
+            },
+            "name": "MQTT Client: mqttMessage"
+          },
+          {
+            "type": "manual",
+            "parameters": [
+              [
+                "topic",
+                {
+                  "type": "string",
+                  "value": "",
+                  "default": "",
+                  "required": true
+                }
+              ],
+              [
+                "payload",
+                {
+                  "type": "string",
+                  "value": "",
+                  "default": "",
+                  "required": true
+                }
+              ],
+              [
+                "QoS",
+                {
+                  "type": "number",
+                  "min": 0,
+                  "integer": true,
+                  "value": 0,
+                  "default": 0,
+                  "required": false,
+                  "max": 2
+                }
+              ],
+              [
+                "retainFlag",
+                {
+                  "type": "boolean",
+                  "value": false,
+                  "default": false,
+                  "required": false
+                }
+              ],
+              [
+                "dupFlag",
+                {
+                  "type": "boolean",
+                  "value": false,
+                  "default": false,
+                  "required": false
+                }
+              ]
+            ],
+            "do": [
+              {
+                "type": "update_values",
+                "updates": [
+                  {
+                    "type": "plugin_state",
+                    "pluginId": "dev.stenz.mqtt",
+                    "stateName": "publishPayload",
+                    "value": {
+                      "template": {
+                        "type": "value",
+                        "source": {
+                          "type": "behavior_parameter",
+                          "behavior": {
+                            "scenePosition": {
+                              "type": "system",
+                              "key": "show"
+                            },
+                            "behaviorName": "MQTT: Publish"
+                          },
+                          "parameterName": "payload"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "plugin_state",
+                    "pluginId": "dev.stenz.mqtt",
+                    "stateName": "QoS",
+                    "value": {
+                      "template": {
+                        "type": "value",
+                        "source": {
+                          "type": "behavior_parameter",
+                          "behavior": {
+                            "scenePosition": {
+                              "type": "system",
+                              "key": "show"
+                            },
+                            "behaviorName": "MQTT: Publish"
+                          },
+                          "parameterName": "QoS"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "plugin_state",
+                    "pluginId": "dev.stenz.mqtt",
+                    "stateName": "retainFlag",
+                    "value": {
+                      "template": {
+                        "type": "value",
+                        "source": {
+                          "type": "behavior_parameter",
+                          "behavior": {
+                            "scenePosition": {
+                              "type": "system",
+                              "key": "show"
+                            },
+                            "behaviorName": "MQTT: Publish"
+                          },
+                          "parameterName": "retainFlag"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "plugin_state",
+                    "pluginId": "dev.stenz.mqtt",
+                    "stateName": "dupFlag",
+                    "value": {
+                      "template": {
+                        "type": "value",
+                        "source": {
+                          "type": "behavior_parameter",
+                          "behavior": {
+                            "scenePosition": {
+                              "type": "system",
+                              "key": "show"
+                            },
+                            "behaviorName": "MQTT: Publish"
+                          },
+                          "parameterName": "dupFlag"
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "send_plugin_event",
+                "pluginId": "dev.stenz.mqtt",
+                "eventName": "publish",
+                "value": {
+                  "template": {
+                    "type": "value",
+                    "source": {
+                      "type": "behavior_parameter",
+                      "behavior": {
+                        "scenePosition": {
+                          "type": "system",
+                          "key": "show"
+                        },
+                        "behaviorName": "MQTT: Publish"
+                      },
+                      "parameterName": "topic"
+                    }
+                  }
+                }
+              }
+            ],
+            "name": "MQTT: Publish"
+          },
+          {
+            "type": "manual",
+            "parameters": [
+              [
+                "topic",
+                {
+                  "type": "string",
+                  "value": "",
+                  "default": "",
+                  "required": true
+                }
+              ]
+            ],
+            "do": [
+              {
+                "type": "send_plugin_event",
+                "pluginId": "dev.stenz.mqtt",
+                "eventName": "subscribe",
+                "value": {
+                  "template": {
+                    "type": "value",
+                    "source": {
+                      "type": "behavior_parameter",
+                      "behavior": {
+                        "scenePosition": {
+                          "type": "system",
+                          "key": "show"
+                        },
+                        "behaviorName": "MQTT: Subscribe"
+                      },
+                      "parameterName": "topic"
+                    }
+                  }
+                }
+              }
+            ],
+            "name": "MQTT: Subscribe"
+          },
+          {
+            "type": "manual",
+            "parameters": [
+              [
+                "topic",
+                {
+                  "type": "string",
+                  "value": "",
+                  "default": "",
+                  "required": true
+                }
+              ]
+            ],
+            "do": [
+              {
+                "type": "send_plugin_event",
+                "pluginId": "dev.stenz.mqtt",
+                "eventName": "unsubscribe",
+                "value": {
+                  "template": {
+                    "type": "value",
+                    "source": {
+                      "type": "behavior_parameter",
+                      "behavior": {
+                        "scenePosition": {
+                          "type": "system",
+                          "key": "show"
+                        },
+                        "behaviorName": "MQTT: Unsubscribe"
+                      },
+                      "parameterName": "topic"
+                    }
+                  }
+                }
+              }
+            ],
+            "name": "MQTT: Unsubscribe"
+          }
+        ],
+        "dashboard": [
+          {
+            "label": "",
+            "rows": [
+              {
+                "label": "MQTT Server Status",
+                "alignment": "center",
+                "widgets": [
+                  {
+                    "type": "value",
+                    "colors": [],
+                    "source": {
+                      "type": "plugin_state",
+                      "pluginId": "dev.stenz.mqtt",
+                      "stateName": "mqttServerConnected"
+                    },
+                    "writable": false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "user": [
+      [
+        "MQTT Publish",
+        {
+          "startTrigger": {
+            "type": "when",
+            "when": {
+              "template": {
+                "type": "show_started"
+              }
+            }
+          },
+          "hidden": false,
+          "optional": false,
+          "restartable": false,
+          "dashboard": [
+            {
+              "label": "Publish to Broker",
+              "rows": [
+                {
+                  "label": "Topic",
+                  "widgets": [
+                    {
+                      "type": "value",
+                      "colors": [],
+                      "source": {
+                        "type": "variable",
+                        "variableScope": "scene",
+                        "variableName": "testTopic"
+                      },
+                      "writable": true
+                    }
+                  ],
+                  "alignment": "left"
+                },
+                {
+                  "label": "Payload",
+                  "alignment": "left",
+                  "widgets": [
+                    {
+                      "type": "value",
+                      "colors": [],
+                      "source": {
+                        "type": "variable",
+                        "variableScope": "scene",
+                        "variableName": "testPayload"
+                      },
+                      "writable": true
+                    }
+                  ]
+                },
+                {
+                  "label": "QoS",
+                  "widgets": [
+                    {
+                      "type": "value",
+                      "colors": [],
+                      "source": {
+                        "type": "variable",
+                        "variableScope": "scene",
+                        "variableName": "testQoS"
+                      },
+                      "writable": true
+                    }
+                  ],
+                  "alignment": "left"
+                },
+                {
+                  "label": "Retain",
+                  "widgets": [
+                    {
+                      "type": "value",
+                      "colors": [],
+                      "source": {
+                        "type": "variable",
+                        "variableScope": "scene",
+                        "variableName": "testRetainFlag"
+                      },
+                      "writable": true
+                    }
+                  ],
+                  "alignment": "center"
+                },
+                {
+                  "label": "",
+                  "widgets": [
+                    {
+                      "type": "button",
+                      "colors": [],
+                      "label": "Publish",
+                      "actions": [
+                        {
+                          "type": "trigger_behavior",
+                          "scene": {
+                            "type": "system",
+                            "key": "show"
+                          },
+                          "name": "MQTT: Publish",
+                          "parameters": {
+                            "topic": {
+                              "template": {
+                                "type": "value",
+                                "source": {
+                                  "type": "variable",
+                                  "variableScope": "scene",
+                                  "variableName": "testTopic"
+                                }
+                              }
+                            },
+                            "payload": {
+                              "template": {
+                                "type": "value",
+                                "source": {
+                                  "type": "variable",
+                                  "variableScope": "scene",
+                                  "variableName": "testPayload"
+                                }
+                              }
+                            },
+                            "QoS": {
+                              "template": {
+                                "type": "value",
+                                "source": {
+                                  "type": "variable",
+                                  "variableScope": "scene",
+                                  "variableName": "testQoS"
+                                }
+                              }
+                            },
+                            "retainFlag": {
+                              "template": {
+                                "type": "value",
+                                "source": {
+                                  "type": "variable",
+                                  "variableScope": "scene",
+                                  "variableName": "testRetainFlag"
+                                }
+                              }
+                            },
+                            "dupFlag": false
+                          }
+                        }
+                      ],
+                      "icon": "forward"
+                    }
+                  ],
+                  "alignment": "right"
+                }
+              ]
+            }
+          ],
+          "variables": [
+            [
+              "testPayload",
+              {
+                "type": "string",
+                "default": ""
+              }
+            ],
+            [
+              "testTopic",
+              {
+                "type": "string",
+                "default": "test/cogsTest"
+              }
+            ],
+            [
+              "testQoS",
+              {
+                "type": "number",
+                "min": 0,
+                "integer": true,
+                "default": 0,
+                "max": 2
+              }
+            ],
+            [
+              "testRetainFlag",
+              {
+                "type": "boolean",
+                "default": false
+              }
+            ]
+          ],
+          "values": [],
+          "behaviors": []
+        }
+      ],
+      [
+        "MQTT Subscribe",
+        {
+          "startTrigger": {
+            "type": "when",
+            "when": {
+              "template": {
+                "type": "show_started"
+              }
+            }
+          },
+          "hidden": false,
+          "optional": false,
+          "restartable": false,
+          "fullHeight": false,
+          "dashboard": [
+            {
+              "label": "MQTT Subscribe",
+              "rows": [
+                {
+                  "label": "Topic",
+                  "alignment": "center",
+                  "widgets": [
+                    {
+                      "type": "value",
+                      "colors": [],
+                      "source": {
+                        "type": "variable",
+                        "variableScope": "scene",
+                        "variableName": "testTopic"
+                      },
+                      "writable": true
+                    }
+                  ]
+                },
+                {
+                  "label": "",
+                  "alignment": "right",
+                  "widgets": [
+                    {
+                      "type": "button",
+                      "colors": [],
+                      "label": "Subscribe",
+                      "actions": [
+                        {
+                          "type": "trigger_behavior",
+                          "scene": {
+                            "type": "system",
+                            "key": "show"
+                          },
+                          "name": "MQTT: Subscribe",
+                          "parameters": {
+                            "topic": {
+                              "template": {
+                                "type": "value",
+                                "source": {
+                                  "type": "variable",
+                                  "variableScope": "scene",
+                                  "variableName": "testTopic"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "icon": "forward"
+                    }
+                  ]
+                },
+                {
+                  "label": "To handle messages add a MQTT Client: mqttMessage behaviour, and use the topic you want to handle as the value",
+                  "alignment": "left",
+                  "widgets": []
+                }
+              ]
+            }
+          ],
+          "variables": [
+            [
+              "testTopic",
+              {
+                "type": "string",
+                "default": ""
+              }
+            ]
+          ],
+          "values": [],
+          "behaviors": [],
+          "notes": ""
+        }
+      ],
+      [
+        "MQTT Unsubscribe",
+        {
+          "startTrigger": {
+            "type": "when",
+            "when": {
+              "template": {
+                "type": "show_started"
+              }
+            }
+          },
+          "hidden": false,
+          "optional": false,
+          "restartable": false,
+          "fullHeight": false,
+          "dashboard": [
+            {
+              "label": "MQTT Unsubscribe",
+              "rows": [
+                {
+                  "label": "Topic",
+                  "alignment": "center",
+                  "widgets": [
+                    {
+                      "type": "value",
+                      "colors": [],
+                      "source": {
+                        "type": "variable",
+                        "variableScope": "scene",
+                        "variableName": "testTopic"
+                      },
+                      "writable": true
+                    }
+                  ]
+                },
+                {
+                  "label": "",
+                  "alignment": "right",
+                  "widgets": [
+                    {
+                      "type": "button",
+                      "colors": [],
+                      "label": "Unsubscribe",
+                      "actions": [
+                        {
+                          "type": "trigger_behavior",
+                          "scene": {
+                            "type": "system",
+                            "key": "show"
+                          },
+                          "name": "MQTT: Unsubscribe",
+                          "parameters": {
+                            "topic": {
+                              "template": {
+                                "type": "value",
+                                "source": {
+                                  "type": "variable",
+                                  "variableScope": "scene",
+                                  "variableName": "testTopic"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "icon": "forward"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "variables": [
+            [
+              "testTopic",
+              {
+                "type": "string",
+                "default": ""
+              }
+            ]
+          ],
+          "values": [],
+          "behaviors": [],
+          "notes": ""
+        }
+      ]
+    ]
+  },
+  "show": {
+    "name": "Mqtt Demo",
+    "showTimeElapsed": true,
+    "sceneDashboardsRows": 1,
+    "runViewWhenShowStarts": ""
+  },
+  "plugins": {
+    "dev.stenz.mqtt": {
+      "version": "1",
+      "enabled": true,
+      "config": {
+        "mqttServerUrl": "mqtt://127.0.0.1:9001",
+        "logging": false,
+        "username": "cogsUser",
+        "password": "123"
+      },
+      "defaultState": {
+        "publishPayload": "",
+        "QoS": 0,
+        "retainFlag": false,
+        "dupFlag": false,
+        "subscribePayload": ""
+      },
+      "stateExpressions": {}
+    }
+  }
+}
