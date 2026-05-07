@@ -100,12 +100,16 @@ function connectToMqttClient(url: string, logging: boolean, username: string, pa
   cogsConnection.setState({mqttServerConnected: mqttClient.connected})
 
   mqttClient.on("error", (err)=>{
-    mqttClient?.end() //This stops reconnecting to the client when errors like connectionrefused occour!
+    //mqttClient?.end() //This stops reconnecting to the client when errors like connectionrefused occour!
     console.error(err) 
   })
   mqttClient.on("connect", ()=>{
     if(logging)console.log("Connected")
     cogsConnection.setState({mqttServerConnected: true})
+  })
+  mqttClient.on("close", () => {
+    if (logging) console.log("Connection closed")
+    cogsConnection.setState({ mqttServerConnected: false })
   })
   mqttClient.on("end", ()=>{
     if(logging)console.log("Connection ended")
